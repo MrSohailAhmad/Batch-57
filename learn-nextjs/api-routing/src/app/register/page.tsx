@@ -20,6 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerSchema } from "@/lib/validation/schema";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -31,16 +33,27 @@ export default function Register() {
     // },
   });
 
+  const route = useRouter();
+
   console.log("🚀 ~ Register ~ form:", form.getValues());
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     try {
       // API call to login
-      await fetch("/api/register", {
+      const userdata = await fetch("/api/register", {
         method: "POST",
         body: JSON.stringify(data),
         cache: "no-store",
       });
+      const response = await userdata.json();
+
+      console.log("res", response);
+      if (response.user) {
+        toast.success(response.message);
+        route.replace("/");
+      } else {
+        toast.error(response.message);
+      }
     } catch (err) {
       console.log("🚀 ~ onSubmit ~ err:", err);
     }

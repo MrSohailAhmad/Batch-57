@@ -1,29 +1,26 @@
 "use server";
 
 import { signIn } from "@/auth";
-import toast from "react-hot-toast";
-
-type LoginData = {
-  email: string;
-  password: string;
-};
-
-const baseUrl = process.env.AUTH_URL;
-export const handleLogin = async (data: LoginData) => {
-  const user = await fetch(`${baseUrl}/api/login`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    cache: "no-store",
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { loginSchema } from "../validation/schema";
+export const handleLogin = async (data: z.infer<typeof loginSchema>) => {
+  "use server";
+  console.log("api call");
+  const response = await signIn("credentials", data, {
+    redirectTo: "/dashboard",
   });
-  if (user.ok) {
-    const response = await user.json();
-    toast.success(response.message);
+
+  if (response) {
+    // const response = await response.json();
+    console.log("if response");
+    redirect("/dashboard");
   }
-  if (!user) {
+  if (!response) {
     throw new Error("User Not found");
   }
 
-  await signIn("credentials", data);
+  // await signIn("credentials", data);
 
   console.log("login data", data);
 };

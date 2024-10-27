@@ -29,7 +29,6 @@ export default function Home() {
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
       // API call to login
-      const result = await handleLogin(data);
       //  const result=  await fetch("/api/login", {
       //     method: "POST",
       //     body: JSON.stringify(data),
@@ -43,6 +42,9 @@ export default function Home() {
       //     const response = await result.json()
       //     toast.error(response.message)
       //   }
+      const result = await handleLogin(data);
+
+      console.log("user result ", result);
     } catch (err) {
       console.log("🚀 ~ onSubmit ~ err:", err);
       console.log("invalid user email and password");

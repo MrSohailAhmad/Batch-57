@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import toast from "react-hot-toast";
-const baseURl = process.env.AUTH_URL;
+const baseURl = process.env.NEXTAUTH_URL;
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -13,14 +12,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         let user = null;
 
-        const result = await fetch(`${baseURl}/api/login`, {
+        const result = await fetch(`${baseURl}api/login`, {
           method: "POST",
           body: JSON.stringify(credentials),
           cache: "no-store",
         });
+
         if (result.ok) {
           const response = await result.json();
-          toast.success(response.message);
+          user = response.user;
         }
 
         if (!user) {
@@ -30,6 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         // return user object with their profile data
+
         return user;
       },
     }),

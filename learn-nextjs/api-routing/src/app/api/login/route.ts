@@ -13,10 +13,12 @@ export async function POST(req: NextRequest) {
     //throw new Error("this is Custom error");
     // Validate the parsed body using Zod
     const parsedData = loginSchema.parse(body);
+
     const result = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, parsedData.email));
+
     if (result.length > 0) {
       const user = result[0];
 
@@ -24,6 +26,7 @@ export async function POST(req: NextRequest) {
         parsedData.password,
         user.password
       );
+
       if (passwordMatch) {
         return NextResponse.json({ message: "User Login Successfully", user });
       } else {

@@ -28,20 +28,6 @@ export default function Home() {
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-      // API call to login
-      //  const result=  await fetch("/api/login", {
-      //     method: "POST",
-      //     body: JSON.stringify(data),
-      //     cache: "no-store",
-      //   });
-      //   if(result.ok){
-      //     const response = await result.json()
-      //     toast.success(response.message)
-      //   }
-      //   else {
-      //     const response = await result.json()
-      //     toast.error(response.message)
-      //   }
       const result = await handleLogin(data);
 
       console.log("user result ", result);

@@ -1,9 +1,17 @@
-import React from 'react'
+import { auth } from "@/auth";
+import React from "react";
 
-function Dashboard() {
+async function Dashboard() {
+  const user = await auth();
+
   return (
-    <div>Dashboard</div>
-  )
+    <div>
+      Dashboard
+      <div>
+        <pre>{JSON.stringify(user, null, 2)}</pre>
+      </div>
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;
